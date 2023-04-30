@@ -8,14 +8,45 @@ function preload () {
 	this.load.image('bug3', 'https://s3.amazonaws.com/codecademy-content/courses/learn-phaser/physics/bug_3.png');
 	this.load.image('platform', 'https://s3.amazonaws.com/codecademy-content/courses/learn-phaser/physics/platform.png');
 	this.load.image('codey', 'https://s3.amazonaws.com/codecademy-content/courses/learn-phaser/physics/codey.png');
-  this.load.image('vincent', './resources/images/vincent.jpg');
+  this.load.image('bald', './resources/images/bald.jpg');
+  this.load.image('banana', './resources/images/banana.jpg');
+  this.load.image('bull', './resources/images/bull.jpg');
+  this.load.image('cafe', './resources/images/cafe.jpg');
+  this.load.image('cape', './resources/images/cape.jpg');
+  this.load.image('card', './resources/images/card.jpg');
+  this.load.image('city', './resources/images/city.jpg');
+  this.load.image('colors', './resources/images/colors.jpg');
+  this.load.image('dress', './resources/images/dress.jpg');
+  this.load.image('eiffel', './resources/images/eiffel.jpg');
+  this.load.image('fringe', './resources/images/fringe.jpg');
+  this.load.image('gold', './resources/images/gold.jpg');
+  this.load.image('hair', './resources/images/hair.jpg');
+  this.load.image('klimt', './resources/images/klimt.jpg');
+  this.load.image('lady', './resources/images/lady.jpg');
+  this.load.image('madame', './resources/images/madame.jpg');
+  this.load.image('magritte', './resources/images/magritte.jpg');
+  this.load.image('man', './resources/images/man.jpg');
+  this.load.image('marilyn', './resources/images/marilyn.jpg');
   this.load.image('mona', './resources/images/mona.jpg');
+  this.load.image('munch', './resources/images/munch.jpg');
+  this.load.image('pattern', './resources/images/pattern.jpg');
   this.load.image('pearl', './resources/images/pearl.jpg');
+  this.load.image('picasso', './resources/images/picasso.jpg');
+  this.load.image('pipe', './resources/images/pipe.jpg');
+  this.load.image('portrait', './resources/images/portrait.jpg');
+  this.load.image('ships', './resources/images/ships.jpg');
+  this.load.image('soup', './resources/images/soup.jpg');
+  this.load.image('stars', './resources/images/stars.jpg');
+  this.load.image('sunflower', './resources/images/sunflower.jpg');
+  this.load.image('umbrella', './resources/images/umbrella.jpg');
+  this.load.image('vincent', './resources/images/vincent.jpg');
+  this.load.image('walk', './resources/images/walk.jpg');
+  
 }
 
 function create () {
 
-  this.pictures = ['vincent', 'mona', 'pearl'];
+  this.pictures = ['bald', 'banana', 'bull', 'cafe', 'cape', 'card', 'city', 'colors', 'dress', 'eiffel', 'fringe', 'gold', 'hair', 'klimt', 'lady', 'madame', 'magritte', 'man', 'marilyn', 'mona', 'munch', 'pattern', 'pearl', 'picasso', 'pipe', 'portrait', 'ships', 'soup', 'stars', 'sunflower', 'umbrella', 'vincent', 'walk'];
 
   this.paintings = this.add.group();
 
@@ -24,8 +55,8 @@ function create () {
   // this.div = document.createElement('div');
   this.snapHistory = [];
 	
-  const painting1 = this.add.image(300, 200, 'vincent').setScale(0.4);
-  const painting2 = this.add.image(Math.random() * 50 + 500, Math.random() * 100 + 200, Phaser.Math.RND.pick(this.pictures)).setScale(Math.random() * 0.2 + 0.1);
+  const painting1 = this.add.image(300, Math.random() * 100 + 100, Phaser.Math.RND.pick(this.pictures)).setScale(Math.random() * 0.2 + 0.1);
+  const painting2 = this.add.image(Math.random() * 50 + 500, Math.random() * 100 + 100, Phaser.Math.RND.pick(this.pictures)).setScale(Math.random() * 0.2 + 0.1);
   const painting3 = this.add.image(Math.random() * 50 + 700, Math.random() * 100 + 100, Phaser.Math.RND.pick(this.pictures)).setScale(Math.random() * 0.2 + 0.1);
   this.paintings.add(painting1);
   this.paintings.add(painting2);
