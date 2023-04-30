@@ -62,13 +62,12 @@ function create () {
   this.paintings.add(painting2);
   this.paintings.add(painting3);
   
-  this.platforms = this.add.group();
+  this.platforms = this.physics.add.staticGroup();
   this.legs = this.add.group();
  
 	// this.platforms.create(320, 250, 'platform').setScale(2, 0.5).refreshBody();
 
   const plat1 = this.add.rectangle(175, 250, 250, 20, 0xFFF000).setOrigin(0);
-  this.physics.add.existing(plat1);
   this.platforms.add(plat1);
   
   const leg1 = this.add.rectangle((plat1.x + 20), plat1.y + 30, 20, 360 - (plat1.y + 30), 0xFFF000).setOrigin(0);
@@ -80,8 +79,9 @@ function create () {
   this.legs.add(leg2);
 
   const plat2 = this.add.rectangle(555, 200, 200, 20, 0xFFF000).setOrigin(0);
-  this.physics.add.existing(plat2);
   this.platforms.add(plat2);
+  // this.physics.add.existing(plat2);
+  // this.platforms.add(plat2);
 
   const leg3 = this.add.rectangle((plat2.x + 20), plat2.y + 30, 20, 360 - (plat2.y + 30), 0xFFF000).setOrigin(0);
   this.physics.add.existing(leg3);
@@ -92,8 +92,9 @@ function create () {
   this.legs.add(leg4);
 
   const plat3 = this.add.rectangle(950, 200, 200, 20, 0xFFF000).setOrigin(0);
-  this.physics.add.existing(plat3);
   this.platforms.add(plat3);
+  // this.physics.add.existing(plat3);
+  // this.platforms.add(plat3);
 
   const leg5 = this.add.rectangle((plat3.x + 20), plat3.y + 30, 20, 360 - (plat3.y + 30), 0xFFF000).setOrigin(0);
   this.physics.add.existing(leg5);
@@ -201,39 +202,41 @@ function update () {
     this.doesChameleonMatchBackground = false;
     if (this.chameleon.x < 300) {
       if (this.isChameleonDisguised) {
-        this.chameleon.x += 2;
+        this.chameleon.x += 4;
       } else {
-        this.chameleon.x += 3;
+        this.chameleon.x += 6;
       }
     } else {
       if (this.isChameleonDisguised) {
         this.paintings.children.entries.forEach(painting => {
-          painting.x -= 2;
+          painting.x -= 4;
         })
         this.platforms.children.entries.forEach(platform => {
-          platform.x -= 2;
+          platform.x -= 4;
         })
+        this.platforms.refresh();
         this.legs.children.entries.forEach(leg => {
-          leg.x -= 2;
+          leg.x -= 4;
         })
       } else {
         this.paintings.children.entries.forEach(painting => {
-          painting.x -= 3;
+          painting.x -= 6;
         })
         this.platforms.children.entries.forEach(platform => {
-          platform.x -= 3;
+          platform.x -= 6;
         })
+        this.platforms.refresh();
         this.legs.children.entries.forEach(leg => {
-          leg.x -= 3;
+          leg.x -= 6;
         })
       }
     }
   } else if (this.cursors.left.isDown && this.chameleon.x > this.chameleon.width / 2) {
     this.doesChameleonMatchBackground = false;
     if (this.isChameleonDisguised) {
-      this.chameleon.x -= 2;
+      this.chameleon.x -= 4;
     } else {
-      this.chameleon.x -= 3;
+      this.chameleon.x -= 6;
     }
   } else if (!this.cursors.right.isDown && !this.cursors.left.isDown && this.isChameleonDisguised && !this.doesChameleonMatchBackground && this.chameleon.body.touching.down) {
     if (!this.isChameleonTransitioning) {
@@ -327,7 +330,7 @@ function update () {
 function createPlatform(scene) {
   const randomNumberY = Math.random() * 100;
   const plat = scene.add.rectangle(Math.random() * 50 + 800, 150 + randomNumberY, Math.random() * 150 + 200, 20, 0xFFF000).setOrigin(0);
-  scene.physics.add.existing(plat);
+  // scene.physics.add.existing(plat);
   scene.platforms.add(plat);
 
   const leg1 = scene.add.rectangle((plat.x + 20), plat.y + 30, 20, 360 - (plat.y + 30), 0xFFF000).setOrigin(0);
