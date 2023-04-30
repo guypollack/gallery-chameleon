@@ -55,9 +55,9 @@ function create () {
   // this.div = document.createElement('div');
   this.snapHistory = [];
 	
-  const painting1 = this.add.image(300, Math.random() * 100 + 100, Phaser.Math.RND.pick(this.pictures)).setOrigin(0).setScale(Math.random() * 0.2 + 0.1);
-  const painting2 = this.add.image(Math.random() * 50 + 700, Math.random() * 100 + 100, Phaser.Math.RND.pick(this.pictures)).setOrigin(0).setScale(Math.random() * 0.2 + 0.1);
-  const painting3 = this.add.image(Math.random() * 50 + 1100, Math.random() * 100 + 100, Phaser.Math.RND.pick(this.pictures)).setOrigin(0).setScale(Math.random() * 0.2 + 0.1);
+  const painting1 = this.add.image(300, Math.random() * 100, Phaser.Math.RND.pick(this.pictures)).setOrigin(0).setScale(Math.random() * 0.1 + 0.25);
+  const painting2 = this.add.image(Math.random() * 50 + 700, Math.random() * 100, Phaser.Math.RND.pick(this.pictures)).setOrigin(0).setScale(Math.random() * 0.1 + 0.25);
+  const painting3 = this.add.image(Math.random() * 50 + 1100, Math.random() * 100, Phaser.Math.RND.pick(this.pictures)).setOrigin(0).setScale(Math.random() * 0.1 + 0.25);
   this.paintings.add(painting1);
   this.paintings.add(painting2);
   this.paintings.add(painting3);
@@ -174,7 +174,7 @@ function update () {
   // console.log(this.paintings.children.entries[0].x, -this.paintings.children.entries[0].width)
   if (this.paintings.children.entries[0].x <= -(this.paintings.children.entries[0].width * this.paintings.children.entries[0]._scaleX)) {
     this.paintings.children.entries[0].destroy();
-    const painting = this.add.image(Math.random() * 50 + 1100, Math.random() * 100 + 100, Phaser.Math.RND.pick(this.pictures)).setOrigin(0).setScale(Math.random() * 0.2 + 0.1);
+    const painting = this.add.image(Math.random() * 50 + 1100, Math.random() * 100, Phaser.Math.RND.pick(this.pictures)).setOrigin(0).setScale(Math.random() * 0.1 + 0.25);
     this.paintings.add(painting);
   }
   // console.log(this.paintings.children.entries[0].x);
