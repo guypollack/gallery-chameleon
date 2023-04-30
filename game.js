@@ -105,6 +105,7 @@ function create () {
   this.legs.add(leg6);
 
   ///
+  this.currentPlatform = "";
 
   this.bottomBoundary = this.physics.add.staticGroup();
   const bottomLine = this.add.rectangle(-1280, 360, 2560, 20, 0x000000).setOrigin(0);
@@ -155,6 +156,8 @@ function create () {
   this.isChameleonDisguised = false;
   this.doesChameleonMatchBackground = false;
   this.isChameleonTransitioning = false;
+  this.isChameleonUpsideDown = false;
+  this.isChameleonFlipping = false;
 
 	gameState.scoreText = this.add.text(320, 340, 'Score: 0', { fontSize: '15px', fill: '#000' })
 
@@ -162,7 +165,11 @@ function create () {
 	
 	// this.physics.add.collider(this.player, platforms)
 
-  this.physics.add.collider(this.chameleon, this.platforms);
+  this.physics.add.collider(this.chameleon, this.platforms, (chameleon, plaform) => {
+    if (this.currentPlatform !== plaform) {
+      this.currentPlatform = plaform;
+    }
+  });
   this.physics.add.collider(this.chameleon, this.bottomBoundary);
   this.physics.add.collider(this.platforms, this.bottomBoundary);
   this.physics.add.collider(this.platforms, this.legs);
@@ -200,35 +207,39 @@ function update () {
 
   if (this.cursors.right.isDown) {
     this.doesChameleonMatchBackground = false;
-    if (this.chameleon.x < 300) {
-      if (this.isChameleonDisguised) {
-        this.chameleon.x += 4;
-      } else {
-        this.chameleon.x += 6;
-      }
+    if (this.isChameleonUpsideDown && Math.abs(this.chameleon.x - (this.currentPlatform.x + this.currentPlatform.width + this.chameleon.width / 2)) < 10) {
+      // do nothing - stops upside down chameleon from walking off ledge
     } else {
-      if (this.isChameleonDisguised) {
-        this.paintings.children.entries.forEach(painting => {
-          painting.x -= 4;
-        })
-        this.platforms.children.entries.forEach(platform => {
-          platform.x -= 4;
-        })
-        this.platforms.refresh();
-        this.legs.children.entries.forEach(leg => {
-          leg.x -= 4;
-        })
+      if (this.chameleon.x < 300) {
+        if (this.isChameleonDisguised) {
+          this.chameleon.x += 4;
+        } else {
+          this.chameleon.x += 6;
+        }
       } else {
-        this.paintings.children.entries.forEach(painting => {
-          painting.x -= 6;
-        })
-        this.platforms.children.entries.forEach(platform => {
-          platform.x -= 6;
-        })
-        this.platforms.refresh();
-        this.legs.children.entries.forEach(leg => {
-          leg.x -= 6;
-        })
+        if (this.isChameleonDisguised) {
+          this.paintings.children.entries.forEach(painting => {
+            painting.x -= 4;
+          })
+          this.platforms.children.entries.forEach(platform => {
+            platform.x -= 4;
+          })
+          this.platforms.refresh();
+          this.legs.children.entries.forEach(leg => {
+            leg.x -= 4;
+          })
+        } else {
+          this.paintings.children.entries.forEach(painting => {
+            painting.x -= 6;
+          })
+          this.platforms.children.entries.forEach(platform => {
+            platform.x -= 6;
+          })
+          this.platforms.refresh();
+          this.legs.children.entries.forEach(leg => {
+            leg.x -= 6;
+          })
+        }
       }
     }
   } else if (this.cursors.left.isDown && this.chameleon.x > this.chameleon.width / 2) {
@@ -267,6 +278,7 @@ function update () {
               textureManager.addImage('chameleonSnapshot', image);
               this.chameleonSnapshot.setTexture('chameleonSnapshot');
               this.chameleonSnapshot.setAlpha(1);
+              this.chameleonSnapshot.flipY = false;
             });
           this.isChameleonTransitioning = false;
           this.doesChameleonMatchBackground = true;
@@ -275,7 +287,27 @@ function update () {
     }
   }
 
-  if (this.cursors.up.isDown && this.chameleon.body.touching.down) {
+  if (this.cursors.down.isDown) {
+    if (!this.isChameleonFlipping) {
+      this.isChameleonFlipping = true;
+      if (this.chameleon.body.touching.down && !this.isChameleonUpsideDown) {
+        this.chameleon.y += 55;
+        this.chameleonSnapshot.flipY = !this.chameleonSnapshot.flipY;
+        this.chameleon.body.setGravity(0, -800);
+        this.isChameleonUpsideDown = true;
+      } else if (this.isChameleonUpsideDown) {
+        this.chameleon.y -= 55;
+        this.chameleonSnapshot.flipY = !this.chameleonSnapshot.flipY;
+        this.chameleon.body.setGravity(0, 0);
+        this.isChameleonUpsideDown = false;
+      }
+      setTimeout(() => {
+        this.isChameleonFlipping = false;
+      }, 200)
+    }
+  }
+
+  if (this.cursors.up.isDown && this.chameleon.body.touching.down && !this.isChameleonUpsideDown) {
     this.chameleon.body.setVelocityY(-400);
   }
 
@@ -306,6 +338,7 @@ function update () {
               }
               textureManager.addImage('chameleonSnapshot', image);
               this.chameleonSnapshot.setTexture('chameleonSnapshot');
+              this.chameleonSnapshot.flipY = false;
             });
           this.isChameleonTransitioning = false;
           this.doesChameleonMatchBackground = true;
