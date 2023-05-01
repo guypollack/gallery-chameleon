@@ -8,6 +8,7 @@ function preload () {
 	this.load.image('bug3', 'https://s3.amazonaws.com/codecademy-content/courses/learn-phaser/physics/bug_3.png');
 	this.load.image('platform', 'https://s3.amazonaws.com/codecademy-content/courses/learn-phaser/physics/platform.png');
 	this.load.image('codey', 'https://s3.amazonaws.com/codecademy-content/courses/learn-phaser/physics/codey.png');
+  this.load.spritesheet('chameleonSpriteSheet', './resources/spritesheets/chameleon-sprite-sheet.png', { frameWidth: 673, frameHeight: 270});
   this.load.image('bald', './resources/images/bald.jpg');
   this.load.image('banana', './resources/images/banana.jpg');
   this.load.image('bull', './resources/images/bull.jpg');
@@ -139,6 +140,14 @@ function create () {
   this.textures.generate('chameleonTransparentFill', { data: chameleonTransparentFillData, pixelWidth: 6 });
   this.textures.generate('chameleonFill', { data: chameleonFillData, pixelWidth: 6 });
 
+  this.chameleonSprite = this.physics.add.sprite(200, 200, 'chameleonSpriteSheet').setScale(0.2);
+  this.anims.create({
+    key: 'chameleonWalk',
+    frames: this.anims.generateFrameNumbers('chameleonSpriteSheet', { start: 0, end: 21 }),
+    frameRate: 50,
+    repeat: -1
+  })
+
   // this.chameleon = this.physics.add.image(400, 200, 'chameleonOutline').setScale(1).setAlpha(1);
   
   this.chameleonOutline = this.add.image(0, 0, 'chameleonOutline').setScale(1).setAlpha(1);
@@ -164,6 +173,13 @@ function create () {
 	// this.player = this.physics.add.sprite(320, 200, 'codey').setScale(.5);
 	
 	// this.physics.add.collider(this.player, platforms)
+
+  this.physics.add.collider(this.chameleonSprite, this.platforms, (chameleon, plaform) => {
+    if (this.currentPlatform !== plaform) {
+      this.currentPlatform = plaform;
+    }
+  });
+
 
   this.physics.add.collider(this.chameleon, this.platforms, (chameleon, plaform) => {
     if (this.currentPlatform !== plaform) {
@@ -206,6 +222,7 @@ function update () {
   // console.log(this.chameleon.body.touching.down);
 
   if (this.cursors.right.isDown) {
+    this.chameleonSprite.anims.play('chameleonWalk', true);
     this.doesChameleonMatchBackground = false;
     if (this.isChameleonUpsideDown && Math.abs(this.chameleon.x - (this.currentPlatform.x + this.currentPlatform.width + this.chameleon.width / 2)) < 10) {
       // do nothing - stops upside down chameleon from walking off ledge
@@ -243,6 +260,7 @@ function update () {
       }
     }
   } else if (this.cursors.left.isDown && this.chameleon.x > this.chameleon.width / 2) {
+    this.chameleonSprite.anims.pause();
     this.doesChameleonMatchBackground = false;
     if (this.isChameleonDisguised) {
       this.chameleon.x -= 4;
@@ -309,6 +327,7 @@ function update () {
 
   if (this.cursors.up.isDown && this.chameleon.body.touching.down && !this.isChameleonUpsideDown) {
     this.chameleon.body.setVelocityY(-400);
+    this.chameleonSprite.body.setVelocityY(-400);
   }
 
   if (Phaser.Input.Keyboard.JustDown(this.cursors.space)) {
@@ -377,7 +396,7 @@ function createPlatform(scene) {
 }
 
 const config = {
-  type: Phaser.AUTO,
+  type: Phaser.WEBGL,
   width: 640,
 	height: 360,
 	backgroundColor: "b9eaff",
